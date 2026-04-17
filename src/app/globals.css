@@ -1,0 +1,553 @@
+@import "tailwindcss";
+
+/*
+ * Emmaus Institute design tokens (v2).
+ * Palette restored to the original blue + purple with gold accents,
+ * refined to read as scripture-appropriate rather than generic SaaS.
+ * Dark mode is driven by a `.dark` class on <html> via next-themes.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand palette */
+  --color-primary-50:  #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+
+  --color-secondary-400: #c084fc;
+  --color-secondary-500: #a855f7;
+  --color-secondary-600: #9333ea;
+  --color-secondary-700: #7e22ce;
+
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+
+  /* Light-mode semantic tokens — refined cathedral palette.
+     Warm paper canvas (page) against white cards (background) creates real
+     lift; sections are gradient washes (defined below) each with its own
+     character so adjacent sections read as distinct rooms. */
+  --color-background: #ffffff; /* pure paper — cards, surfaces */
+  --color-page:       #f7f1e1; /* warm cream canvas — visibly tinted so white cards lift off it */
+  --color-surface:    #efe8d1; /* warmer secondary surface */
+  --color-surface-2:  #ded3b4;
+  --color-foreground: #0f172a; /* slate-900 — premium dark, never pure black */
+  --color-foreground-soft: #1e293b; /* slate-800 */
+  --color-muted:      #5b6576; /* slate-600ish — stronger contrast against cream */
+  --color-border:     #d0c7ae; /* warm, clearly visible hairline */
+  --color-border-strong: #9a8f72;
+  --color-accent:     #2563eb; /* blue-600 */
+  --color-accent-foreground: #ffffff;
+
+  /* Per-section start/end stops — deepened so each section has real identity
+     and adjacent sections transition with a visible, tasteful colour shift.
+     Still soft enough to keep the tone reverent, not saturated. */
+  --section-cream-from:    #fdf4d8;
+  --section-cream-to:      #efdda5;
+  --section-sky-from:      #e0ecff;
+  --section-sky-to:        #b9ceef;
+  --section-lavender-from: #ede2ff;
+  --section-lavender-to:   #cbbaec;
+  --section-amber-from:    #ffe7a8;
+  --section-amber-to:      #ebb75a;
+  --section-rose-from:     #fbd7d7;
+  --section-rose-to:       #edaaaa;
+
+  /* Backwards-compatibility flat tokens (used by a few components). */
+  --section-cream:    var(--section-cream-from);
+  --section-sky:      var(--section-sky-from);
+  --section-lavender: var(--section-lavender-from);
+  --section-amber:    var(--section-amber-from);
+  --section-rose:     var(--section-rose-from);
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+
+  /* Brand gradient — used for hero/CTA accents */
+  --gradient-brand: linear-gradient(135deg, #2563eb 0%, #7e22ce 100%);
+  --gradient-brand-soft: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+
+  /* Emmaus-road illustration — warm dawn palette for the footer banner */
+  --illus-sky-from:     #fdf4e3;
+  --illus-sky-to:       #f8e8c4;
+  --illus-sun:          #f59e0b;
+  --illus-mountain-far: #cdd5e0;
+  --illus-mountain-mid: #a08a63;
+  --illus-road:         #d9bf93;
+  --illus-road-mark:    #6b5330;
+  --illus-cross:        #3b2418;
+  --illus-figure:       #3b2418;
+  --illus-bird:         #6b5a3d;
+
+}
+
+/* Dark-mode token overrides */
+.dark {
+  --color-background: #0b1220; /* deep slate, warmer than pure black */
+  --color-page:       #0b1220;
+  --color-surface:    #111a2e;
+  --color-surface-2:  #182444;
+  --color-foreground: #e2e8f0;
+  --color-foreground-soft: #cbd5e1;
+  --color-muted:      #94a3b8;
+  --color-border:     #2a3656; /* lifted so section transitions read clearly */
+  --color-border-strong: #445176;
+  --color-accent:     #60a5fa;
+  --color-accent-foreground: #0b1220;
+  --gradient-brand: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  --gradient-brand-soft: linear-gradient(135deg, #111a2e 0%, #1a1433 100%);
+
+  /* In dark mode every section tint collapses to the surface tone — keeps
+     parity without painting every section the same. */
+  --section-cream:    #111a2e;
+  --section-sky:      #0f1b34;
+  --section-lavender: #16142e;
+  --section-amber:    #171428;
+  --section-rose:     #1c1220;
+
+  /* Emmaus-road illustration — deep dusk palette so the cross reads in the dark */
+  --illus-sky-from:     #1a1433;
+  --illus-sky-to:       #0b0f1f;
+  --illus-sun:          #f59e0b;
+  --illus-mountain-far: #1e2a45;
+  --illus-mountain-mid: #0d1426;
+  --illus-road:         #4a3a22;
+  --illus-road-mark:    #b88a3a;
+  --illus-cross:        #fde68a;
+  --illus-figure:       #e2e8f0;
+  --illus-bird:         #cbd5e1;
+
+}
+
+html { scroll-behavior: smooth; }
+
+/* Prevent a dark-mode FOUC before next-themes hydrates */
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+
+body {
+  background: var(--color-page);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+}
+
+/* Utility shortcuts — kept small on purpose */
+.text-gradient-brand {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-gradient-brand { background: var(--gradient-brand); }
+.bg-gradient-brand-soft { background: var(--gradient-brand-soft); }
+
+/* Section washes — diagonal gradients with a subtle radial highlight on top
+   for atmospheric depth. Each utility also draws a 1px top rule so stacked
+   sections get a clear visual boundary without every caller adding a
+   border class. Dark mode collapses to surface (see overrides). */
+.bg-section-cream {
+  background:
+    radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(160deg, var(--section-cream-from), var(--section-cream-to));
+  border-top: 1px solid var(--color-border);
+}
+.bg-section-sky {
+  background:
+    radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(160deg, var(--section-sky-from), var(--section-sky-to));
+  border-top: 1px solid var(--color-border);
+}
+.bg-section-lavender {
+  background:
+    radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(160deg, var(--section-lavender-from), var(--section-lavender-to));
+  border-top: 1px solid var(--color-border);
+}
+.bg-section-amber {
+  background:
+    radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(160deg, var(--section-amber-from), var(--section-amber-to));
+  border-top: 1px solid var(--color-border);
+}
+.bg-section-rose {
+  background:
+    radial-gradient(at 80% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    linear-gradient(160deg, var(--section-rose-from), var(--section-rose-to));
+  border-top: 1px solid var(--color-border);
+}
+.dark .bg-section-cream,
+.dark .bg-section-sky,
+.dark .bg-section-lavender,
+.dark .bg-section-amber,
+.dark .bg-section-rose {
+  background: var(--color-surface);
+}
+
+/* Subtle scripture-parchment grain for hero/background panels */
+.bg-grain {
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(37, 99, 235, 0.10), transparent 42%),
+    radial-gradient(circle at 82% 0%,  rgba(147, 51, 234, 0.09), transparent 48%),
+    radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.08), transparent 55%);
+}
+.dark .bg-grain {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.10), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(168, 85, 247, 0.10), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(251, 191, 36, 0.06), transparent 55%);
+}
+
+/* ---------- Reusable depth tokens ----------
+   Three-layer neutral shadows (no colored bloom) — reads as believable light,
+   not as a "glowing card". A single warm tint at the bottom adds candle-like
+   warmth without screaming color. */
+.shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.07),
+    0 3px 8px rgba(15, 23, 42, 0.08),
+    0 16px 32px -14px rgba(15, 23, 42, 0.22);
+}
+.shadow-lift {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 4px 10px rgba(15, 23, 42, 0.07),
+    0 24px 48px -22px rgba(15, 23, 42, 0.24);
+}
+.shadow-lift-lg {
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.06),
+    0 8px 18px rgba(15, 23, 42, 0.09),
+    0 40px 72px -28px rgba(15, 23, 42, 0.32),
+    0 12px 24px -16px rgba(245, 158, 11, 0.18);
+}
+
+/* Universal hover-lift: any box can opt in. */
+.hover-lift {
+  transition:
+    transform 380ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 380ms ease,
+    border-color 380ms ease,
+    background-color 380ms ease;
+  will-change: transform;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+  box-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.06),
+    0 12px 24px rgba(15, 23, 42, 0.10),
+    0 36px 64px -24px rgba(15, 23, 42, 0.30),
+    0 16px 32px -18px rgba(245, 158, 11, 0.20);
+}
+.dark .hover-lift:hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    0 12px 24px rgba(0, 0, 0, 0.5),
+    0 40px 72px -24px rgba(59, 130, 246, 0.45),
+    0 18px 36px -14px rgba(168, 85, 247, 0.28);
+}
+.dark .shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 10px 28px -10px rgba(0, 0, 0, 0.55);
+}
+.dark .shadow-lift {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 18px 40px -18px rgba(59, 130, 246, 0.35);
+}
+.dark .shadow-lift-lg {
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.45),
+    0 30px 60px -22px rgba(59, 130, 246, 0.45),
+    0 12px 24px -12px rgba(168, 85, 247, 0.30);
+}
+
+/* ---------- Motion (hero ambient) ---------- */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50%      { transform: translateY(-18px) translateX(8px); }
+}
+@keyframes float-slower {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50%      { transform: translateY(14px) translateX(-10px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.55; }
+}
+@keyframes gradient-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.animate-float-slow   { animation: float-slow 9s ease-in-out infinite; }
+.animate-float-slower { animation: float-slower 12s ease-in-out infinite; }
+.animate-pulse-glow   { animation: pulse-glow 5s ease-in-out infinite; }
+.animate-gradient-drift {
+  background-size: 200% 200%;
+  animation: gradient-drift 14s ease-in-out infinite;
+}
+
+/* Staggered reveal — consumer sets --delay via inline style */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+.reveal-up {
+  opacity: 0;
+  animation: reveal-up 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* SVG underline-draw animation for the hero accent */
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+.draw-line {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: draw-line 1.6s ease-out 0.8s forwards;
+}
+
+/* Gentle vertical bob for the scroll cue */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(6px); opacity: 1; }
+}
+.animate-bob { animation: bob 2.4s ease-in-out infinite; }
+
+/* ---------- Glass surfaces ---------- */
+/* Frosted glass card. Pairs with hover-lift for interactive surfaces.
+   Uses backdrop-filter + a translucent fill that shifts per mode. */
+.glass {
+  background-color: color-mix(in srgb, #ffffff 55%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 60%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 12px 32px -16px rgba(15, 23, 42, 0.22);
+}
+.dark .glass {
+  background-color: color-mix(in srgb, #ffffff 6%, transparent);
+  border-color: color-mix(in srgb, #ffffff 14%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    0 18px 40px -16px rgba(0, 0, 0, 0.55);
+}
+.glass-strong {
+  background-color: color-mix(in srgb, #ffffff 70%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 75%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 4px 8px rgba(15, 23, 42, 0.06),
+    0 24px 56px -20px rgba(15, 23, 42, 0.32);
+}
+.dark .glass-strong {
+  background-color: color-mix(in srgb, #ffffff 9%, transparent);
+  border-color: color-mix(in srgb, #ffffff 18%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.45),
+    0 28px 60px -22px rgba(0, 0, 0, 0.65);
+}
+
+/* Horizontal marquee — used by hero scripture ticker */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* 3D logo spin — continuous Y-axis rotation with a slight X-tilt so the
+   extruded depth stays visible through the full revolution. Paired with a
+   stack of logo layers at varying translateZ values to simulate thickness. */
+@keyframes logo-3d-spin {
+  from { transform: rotateX(12deg) rotateY(0deg); }
+  to   { transform: rotateX(12deg) rotateY(360deg); }
+}
+.animate-logo-3d-spin {
+  animation: logo-3d-spin 4s linear infinite;
+  transform-style: preserve-3d;
+}
+
+/* Bouncing dots for "Loading…" — each dot offsets its delay to form a wave. */
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40%           { transform: translateY(-4px); opacity: 1; }
+}
+.animate-dot-bounce {
+  animation: dot-bounce 1.2s ease-in-out infinite;
+}
+
+/* Scripture reveal — soft fade + lift used when the verse content changes.
+   Gives each new verse a gentle "illuminated" entrance. */
+@keyframes scripture-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.animate-scripture-reveal {
+  animation: scripture-reveal 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Apply-form step entrance — gentle lift + fade as each wizard step mounts. */
+@keyframes step-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-step-enter {
+  animation: step-enter 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+
+/* Orbit loop for decorative scripture pills */
+@keyframes orbit-1 {
+  from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+}
+@keyframes orbit-2 {
+  from { transform: rotate(120deg) translateX(180px) rotate(-120deg); }
+  to   { transform: rotate(480deg) translateX(180px) rotate(-480deg); }
+}
+@keyframes orbit-3 {
+  from { transform: rotate(240deg) translateX(160px) rotate(-240deg); }
+  to   { transform: rotate(600deg) translateX(160px) rotate(-600deg); }
+}
+.animate-orbit-1 { animation: orbit-1 28s linear infinite; }
+.animate-orbit-2 { animation: orbit-2 34s linear infinite; }
+.animate-orbit-3 { animation: orbit-3 30s linear infinite reverse; }
+
+/* ---------- Glass-link: pill-shaped glass buttons with a sweeping shine ---------- */
+.glass-link {
+  position: relative;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--color-background) 72%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 300ms ease, border-color 300ms ease,
+    background-color 300ms ease, box-shadow 300ms ease, color 300ms ease;
+}
+.glass-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  transform: translateX(-110%);
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.glass-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-gold-400);
+  background-color: color-mix(in srgb, var(--color-background) 88%, transparent);
+  box-shadow:
+    0 10px 26px -14px rgba(15, 23, 42, 0.22),
+    0 2px 6px -2px rgba(251, 191, 36, 0.35);
+}
+.glass-link:hover::before {
+  transform: translateX(110%);
+}
+.glass-link:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+.dark .glass-link {
+  background-color: color-mix(in srgb, var(--color-foreground) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-foreground) 14%, transparent);
+}
+.dark .glass-link::before {
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 80%
+  );
+}
+.dark .glass-link:hover {
+  background-color: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+}
+
+/* ---------- Snowfall (dark mode only) ---------- */
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, -20vh, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift, 30px), 120vh, 0);
+    opacity: 0;
+  }
+}
+.snowflake {
+  position: absolute;
+  top: 0;
+  border-radius: 9999px;
+  background: #ffffff;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation-name: snowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Dark-mode hero: hide the snowfall only. Everything else (orbs, gradient
+   drift, sparkles, reveal-up, card-deck cycle) remains as in light mode. */
+.dark .hero-section .snowflake { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
