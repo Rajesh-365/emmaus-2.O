@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import Script from "next/script";
 import { Header } from "@/components/layout/Header";
 import { TopBrandBar } from "@/components/layout/TopBrandBar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,6 +8,8 @@ import { HideOnAdmin } from "@/components/layout/HideOnAdmin";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { site } from "@/lib/site";
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = "G-9LLG83G2GJ";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,6 +60,20 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${serif.variable}`}>
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+      </head>
       <body className="flex min-h-dvh flex-col">
         <ThemeProvider>
           <HideOnAdmin>
